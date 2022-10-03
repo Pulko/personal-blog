@@ -1,16 +1,17 @@
-import Alert from '../components/alert'
-import Footer from '../components/footer'
-import Meta from '../components/meta'
+import Footer from './elements/footer'
+import Meta from './meta'
 
-export default function Layout({ preview, children }) {
-  return (
-    <>
-      <Meta />
-      <div className="min-h-screen">
-        <Alert preview={preview} />
-        <main>{children}</main>
-      </div>
-      <Footer />
-    </>
-  )
-}
+import Header from './elements/header'
+
+const Layout = ({ children }) => (
+  <div className="bg-sky-100 bg-gradient-to-r from-indigo-200 to-pink-200 text-slate-900">
+    <Meta />
+    <div className="min-h-screen">
+      <Header />
+      <main>{children}</main>
+    </div>
+    <Footer />
+  </div>
+)
+
+export default Layout

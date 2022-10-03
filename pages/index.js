@@ -1,43 +1,42 @@
-import Container from '../components/container'
-import MoreStories from '../components/more-stories'
-import HeroPost from '../components/hero-post'
-import Intro from '../components/intro'
-import Layout from '../components/layout'
-import { getAllPostsForHome } from '../lib/api'
 import Head from 'next/head'
-import { CMS_NAME } from '../lib/constants'
+import Image from 'next/image'
 
-export default function Index({ preview, allPosts }) {
-  const heroPost = allPosts[0]
-  const morePosts = allPosts.slice(1)
+import Container from 'components/elements/container'
+import Intro from 'components/elements/intro'
+import Layout from 'components/layout'
+
+const Index = () => {
+  const diffYears = Math.floor((new Date() - new Date('June 20, 2018')) / (1000 * 60 * 60 * 24 * 356))
+
   return (
-    <>
-      <Layout preview={preview}>
-        <Head>
-          <title>Next.js Blog Example with {CMS_NAME}</title>
-        </Head>
-        <Container>
-          <Intro />
-          {heroPost && (
-            <HeroPost
-              title={heroPost.title}
-              coverImage={heroPost.coverImage}
-              date={heroPost.date}
-              author={heroPost.author}
-              slug={heroPost.slug}
-              excerpt={heroPost.excerpt}
-            />
-          )}
-          {morePosts.length > 0 && <MoreStories posts={morePosts} />}
-        </Container>
-      </Layout>
-    </>
+    <Layout>
+      <Head>
+        <title>Meet Pulko</title>
+      </Head>
+      <Container>
+        <Intro heading="Hey :)" />
+
+        <div className="flex flex-col md:flex-row text-center">
+          <div className="mx-0">
+            <Image src="/avatar.jpg" alt="my avatar when I am smiling" width={300} height={250} layout="fixed" />
+          </div>
+          <div className="text-left text-xl text-slate-900 ml-0 mt-20 md:mt-0 sm:ml-20 font-medium">
+            <h3 className="text-2xl font-bold">
+              {'Fedor Tkachenko'}
+            </h3>
+
+            <p className="my-4">
+              {`Software Engineer with ${diffYears} years of Frontend Development experience.`}
+              <br />
+              {'iOS Developer on the weekends. Cat fan on a daily basis.'}
+              <br />
+              {' I love travelling and doing something new.'}
+            </p>
+          </div>
+        </div>
+      </Container>
+    </Layout>
   )
 }
 
-export async function getStaticProps({ preview = false }) {
-  const allPosts = (await getAllPostsForHome(preview)) ?? []
-  return {
-    props: { preview, allPosts },
-  }
-}
+export default Index

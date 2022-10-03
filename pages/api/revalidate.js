@@ -20,7 +20,8 @@ export default async function handler(req, res) {
 
     // revalidate the individual post and the home page
     await res.revalidate(`/posts/${postSlug}`)
-    await res.revalidate('/')
+    await res.revalidate('/posts')
+    await res.revalidate('/portfolio')
 
     return res.json({ revalidated: true })
   } catch (err) {
