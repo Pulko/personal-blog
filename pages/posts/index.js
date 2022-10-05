@@ -5,7 +5,7 @@ import PostPreview from 'components/post/post-preview'
 import Intro from 'components/elements/intro'
 import Layout from 'components/layout'
 
-import { getAllPostsForHome } from 'lib/api'
+import { getAllPosts } from 'lib/api'
 
 const PostsPage = (props) => {
   const { allPosts } = props
@@ -26,7 +26,7 @@ const PostsPage = (props) => {
 }
 
 export async function getStaticProps({ preview = false }) {
-  const allPosts = ((await getAllPostsForHome(preview)) ?? [])
+  const allPosts = ((await getAllPosts(preview)) ?? [])
 
   return {
     props: { preview, allPosts },
