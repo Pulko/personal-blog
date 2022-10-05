@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 const navigation = [
   { name: 'Portfolio', href: '/portfolio' },
-  { name: 'Blog', href: '/posts' },
+  { name: 'Posts', href: '/posts' },
 ]
 
 const Header = () => (
