@@ -8,7 +8,6 @@ import Container from 'components/elements/container'
 import PostBody from 'components/post/post-body'
 import MorePosts from 'components/post/more-posts'
 import PostHeader from 'components/post/post-header'
-import SectionSeparator from 'components/elements/section-separator'
 import Layout from 'components/layout'
 import PostTitle from 'components/post/post-title'
 
@@ -44,10 +43,9 @@ const PostPage = (props) => {
             </article>
 
             {morePosts?.length && (
-              <>
-                <SectionSeparator />
+              <div className="mt-28">
                 <MorePosts posts={morePosts} />
-              </>
+              </div>
             )}
           </>
         )}
