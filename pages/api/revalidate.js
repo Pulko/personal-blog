@@ -1,32 +1,32 @@
 // pages/api/revalidate.js
 
 export default async function handler(req, res) {
-  // should be secret, custom header coming in from Contentful
   let inboundRevalToken = req.headers['x-vercel-reval-key']
 
-  // Check for secret to confirm this is a valid request
   if (!inboundRevalToken) {
     return res
       .status(401)
       .json({ message: 'x-vercel-reval-key header not defined' })
   } else if (inboundRevalToken !== process.env.CONTENTFUL_REVALIDATE_SECRET) {
-    return res.status(401).json({ message: 'Invalid token' })
+    return res
+      .status(401)
+      .json({ message: 'Invalid token' })
   }
 
-  try {
-    // Note: if this fails to parse you may have forget to set the
-    // "content-type" header correctly as mentioned here https://github.com/vercel/next.js/blob/canary/examples/cms-contentful/README.md#step-9-try-using-on-demand-revalidation
-    let postSlug = req.body.fields.slug['en-US']
+  let postSlug = req.body.fields.slug?.['en-US']
+  let portfolio = req.body.fields.portfolio
 
-    // revalidate the individual post and the home page
-    await res.revalidate(`/posts/${postSlug}`)
-    await res.revalidate('/posts')
-    await res.revalidate('/portfolio')
+  let promises = [res.revalidate('/posts')]
 
-    return res.json({ revalidated: true })
-  } catch (err) {
-    // If there was an error, Next.js will continue
-    // to show the last successfully generated page
-    return res.status(500).send(err)
+  if (postSlug) {
+    promises.push(res.revalidate(`/posts/${postSlug}`))
   }
+
+  if (!!portfolio) {
+    promises.push(res.revalidate('/portfolio'))
+  }
+
+  return await Promise.all(promises)
+    .then(() => res.json({ revalidated: true }))
+    .catch((err) => res.status(500).send("Not revalidated", err))
 }
