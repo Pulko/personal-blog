@@ -1,13 +1,21 @@
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types'
 
+import SectionSeparator from 'components/elements/section-separator'
+
 import markdownStyles from './markdown-styles.module.css'
 
-const customMarkdownOptions = (_content) => ({
+const customMarkdownOptions = () => ({
   renderMark: {
     [MARKS.BOLD]: (text) => <b className="bold">{text}</b>,
+    [MARKS.CODE]: (text) => (
+      <div className="p-3 bg-slate-500/20 rounded">
+        <pre>{text}</pre>
+      </div>
+    ),
   },
   renderNode: {
+    [BLOCKS.HR]: () => <SectionSeparator />,
     [BLOCKS.PARAGRAPH]: (_node, children) => <p className="text-lg align-center mb-4">{children}</p>,
     [BLOCKS.HEADING_1]: (_node, children) => <h1 className="text-4xl h1 mb-4">{children}</h1>,
     [BLOCKS.HEADING_2]: (_node, children) => <h2 className="text-3xl h2 mb-4">{children}</h2>,
@@ -19,9 +27,11 @@ const customMarkdownOptions = (_content) => ({
         target="_blank"
         rel="noreferrer"
         className="underline font-medium hover:text-emerald-600"
-      >{children}</a>
+      >
+        {children}
+      </a>
     )
-  },
+  }
 })
 
 export default function PostBody({ content }) {
