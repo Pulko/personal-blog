@@ -1,16 +1,14 @@
-// pages/api/revalidate.js
+function sendResponse(res, { code = 200, json = {} }) {
+  return res.status(code).json(json)
+}
 
 export default async function handler(req, res) {
   let inboundRevalToken = req.headers['x-vercel-reval-key']
 
   if (!inboundRevalToken) {
-    return res
-      .status(401)
-      .json({ message: 'x-vercel-reval-key header not defined' })
+    return sendResponse(res, { code: 401, json: { message: 'x-vercel-reval-key header not defined' } })
   } else if (inboundRevalToken !== process.env.CONTENTFUL_REVALIDATE_SECRET) {
-    return res
-      .status(401)
-      .json({ message: 'Invalid token' })
+    return sendResponse(res, { code: 401, json: { message: 'x-vercel-reval-key does not match' } })
   }
 
   let postSlug = req.body.fields.slug?.['en-US']
@@ -27,6 +25,6 @@ export default async function handler(req, res) {
   }
 
   return await Promise.all(promises)
-    .then(() => res.json({ revalidated: true }))
-    .catch((err) => res.status(500).send("Not revalidated", err))
+    .then(() => sendResponse(res, { json: { revalidated: true } }))
+    .catch((error) => sendResponse(res, { code: 500, json: { message: "not revalidated", error } }))
 }
