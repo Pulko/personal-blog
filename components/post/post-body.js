@@ -9,7 +9,7 @@ const customMarkdownOptions = () => ({
   renderMark: {
     [MARKS.BOLD]: (text) => <b className="bold">{text}</b>,
     [MARKS.CODE]: (text) => (
-      <div className="p-3 bg-slate-500/20 rounded">
+      <div className="p-3 bg-slate-500/20 rounded overflow-x-auto">
         <pre>{text}</pre>
       </div>
     ),
